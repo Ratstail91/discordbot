@@ -18,6 +18,7 @@ bot.on("ready", function (evt) {
     console.log(bot.username + " - (" + bot.id + ")");
 });
 
+//message handler
 bot.on("message", function (user, userID, channelID, message, evt) {
   //ignore bot messages
   if (user == bot.username) {
@@ -41,6 +42,10 @@ bot.on("message", function (user, userID, channelID, message, evt) {
       sendMessage(userID, channelID, "pang!");
     break;
 
+    case "help":
+      sendMessage(channelID, helpString);
+    break;
+
     //rolling dice (TODO: needs a better parsing library)
     case "roll":
       let roll = parseAndRoll(args);
@@ -52,6 +57,12 @@ bot.on("message", function (user, userID, channelID, message, evt) {
       sendMessage(userID, channelID,
         "rolled " + roll.value + " (" + roll.rolls.toString() + ")"
       );
+    break;
+
+    case "macroset":
+    case "macroget":
+    case "macro":
+      sendMessage(userID, channelID, "This feature isn't ready yet.");
     break;
 
     //other
@@ -87,3 +98,39 @@ function sendMessage(userID, channelID, message) {
     message: message
   });
 }
+
+//help utilities
+const helpString = "You can use the following commands with me:\n"
++ "\t!help -- Show this message\n"
++ "\t!ping -- Used for debugging\n"
++ "\n"
++ "\t!macroset X Y -- Set the macro X to the value of Y\n"
++ "\t!macroget X -- Get the value of macro X\n"
++ "\t!macro X -- Execute macro X\n"
++ "\n"
++ "\t!roll XdY -- Roll X dice of Y sides\n"
+
+//help message every 10 minutes
+setInterval(function() {
+
+  //do nothing with no channels
+  if (Object.keys(bot.channels).length == 0) {
+    return;
+  }
+
+  //get the key to the channel named "general" (guaranteed to exist)
+  let channelKey = Object.keys(bot.channels).reduce(function(acc, key) {
+    if (bot.channels[acc].name == "general") {
+      return acc;
+    } else {
+      return key;
+    }
+  });
+
+  //actually send the message
+  bot.sendMessage({
+    to: channelKey,
+    message: "Type \"!help\" for help"
+  });
+
+}, 1000 * 60 * 10);
