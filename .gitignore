@@ -1,0 +1,28 @@
+#Editor generated files
+*.sln
+*.vcproj
+*.suo
+*.ncb
+*.user
+
+#Directories
+Release/
+Debug/
+Out/
+release/
+debug/
+out/
+node_modules/
+
+#Project generated files
+*.db
+*.o
+*.a
+*.exe
+*.class
+*.jar
+auth.json
+
+#Shell files
+*.bat
+*.sh
