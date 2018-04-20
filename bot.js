@@ -1,6 +1,7 @@
 //includes
 let discord = require("discord.io");
 let { parseAndRoll } = require("roll-parser");
+let { macroGet, macroSet } = require("./macro_tool.js");
 
 //authentication token
 //LINK: https://github.com/reactiflux/discord-irc/wiki/Creating-a-discord-bot-&-getting-a-token
@@ -25,6 +26,10 @@ bot.on("message", function (user, userID, channelID, message, evt) {
     return;
   }
 
+  return executeCommand(user, userID, channelID, message, evt);
+});
+
+function executeCommand(user, userID, channelID, message, nestedMacro = false) {
   //ignore non-commands
   if (message.slice(0, 1) != "!") {
     return;
@@ -59,17 +64,38 @@ bot.on("message", function (user, userID, channelID, message, evt) {
       );
     break;
 
-    case "macroset":
-    case "macroget":
-    case "macro":
-      sendMessage(userID, channelID, "This feature isn't ready yet.");
+    case "macroset": {
+      let name = args.split(" ")[0];
+      let cmd = args.slice(1 + name.length).trim();
+      macroSet(user, name, cmd);
+      sendMessage(userID, channelID, "Macro set");
+    }
+    break;
+
+    case "macroget": {
+      let name = args.split(" ")[0];
+      let macro = macroGet(user, name);
+      sendMessage(userID, channelID, macro);
+    }
+    break;
+
+    case "macro": {
+      if (nestedMacro == true) {
+        sendMessage(userID, channelID, "Nested macros disallowed");
+        break;
+      }
+
+      let name = args.split(" ")[0];
+      let macro = macroGet(user, name);
+      executeCommand(user, userID, channelID, macro, true);
+    }
     break;
 
     //other
     default:
       return notUnderstood(userID, channelID);
   }
-});
+};
 
 //utility functions
 function notUnderstood(userID, channelID) {
@@ -108,7 +134,7 @@ const helpString = "You can use the following commands with me:\n"
 + "\t!macroget X -- Get the value of macro X\n"
 + "\t!macro X -- Execute macro X\n"
 + "\n"
-+ "\t!roll XdY -- Roll X dice of Y sides\n"
++ "\t!roll XdY+Z -- Roll X dice of Y sides, with an optional Z modifier\n"
 
 //help message every 10 minutes
 setInterval(function() {
@@ -133,4 +159,5 @@ setInterval(function() {
     message: "Type \"!help\" for help"
   });
 
-}, 1000 * 60 * 10);
+}, 1000 * 60 * 60);
+

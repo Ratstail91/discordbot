@@ -13,6 +13,7 @@ release/
 debug/
 out/
 node_modules/
+macros/
 
 #Project generated files
 *.db
