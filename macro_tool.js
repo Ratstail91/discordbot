@@ -24,7 +24,11 @@ function macroGet(user, name) {
   if (macros === null) {
     return null;
   } else {
-    return macros[name];
+    if (macros[name] === undefined) {
+      return null;
+    } else {
+      return macros[name];
+    }
   }
 }
 

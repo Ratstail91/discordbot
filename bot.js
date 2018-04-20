@@ -26,13 +26,18 @@ bot.on("message", function (user, userID, channelID, message, evt) {
     return;
   }
 
+  //ignore non-commands
+  if (message.slice(0, 1) != "!") {
+    return;
+  }
+
   return executeCommand(user, userID, channelID, message, evt);
 });
 
 function executeCommand(user, userID, channelID, message, nestedMacro = false) {
   //ignore non-commands
   if (message.slice(0, 1) != "!") {
-    return;
+    return notUnderstood(userID, channelID);
   }
 
   //get the command
@@ -55,7 +60,7 @@ function executeCommand(user, userID, channelID, message, nestedMacro = false) {
     case "roll":
       let roll = parseAndRoll(args);
 
-      if (roll == null) {
+      if (roll === null) {
         return notUnderstood(userID, channelID);
       }
 
@@ -67,6 +72,9 @@ function executeCommand(user, userID, channelID, message, nestedMacro = false) {
     case "macroset": {
       let name = args.split(" ")[0];
       let cmd = args.slice(1 + name.length).trim();
+      if (name.length === 0 || cmd.length === 0) {
+        return notUnderstood(userID, channelID);
+      }
       macroSet(user, name, cmd);
       sendMessage(userID, channelID, "Macro set");
     }
@@ -75,6 +83,9 @@ function executeCommand(user, userID, channelID, message, nestedMacro = false) {
     case "macroget": {
       let name = args.split(" ")[0];
       let macro = macroGet(user, name);
+      if (macro === null) {
+        return notUnderstood(userID, channelID);
+      }
       sendMessage(userID, channelID, macro);
     }
     break;
@@ -87,6 +98,9 @@ function executeCommand(user, userID, channelID, message, nestedMacro = false) {
 
       let name = args.split(" ")[0];
       let macro = macroGet(user, name);
+      if (macro === null) {
+        return notUnderstood(userID, channelID);
+      }
       executeCommand(user, userID, channelID, macro, true);
     }
     break;
