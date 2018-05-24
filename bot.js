@@ -8,21 +8,21 @@ let { macroGet, macroSet } = require("./macro_tool.js");
 let auth = require("./auth.json");
 
 //Initialize Discord Bot
-let bot = new discord.Client({
+let discordBot = new discord.Client({
    token: auth.token,
    autorun: true
 });
 
-bot.on("ready", function (evt) {
+discordBot.on("ready", function (evt) {
     console.log("Connected");
     console.log("Logged in as: ");
-    console.log(bot.username + " - (" + bot.id + ")");
+    console.log(discordBot.username + " - (" + discordBot.id + ")");
 });
 
 //message handler
-bot.on("message", function (user, userID, channelID, message, evt) {
+discordBot.on("message", function (user, userID, channelID, message, evt) {
   //ignore bot messages
-  if (user == bot.username) {
+  if (user == discordBot.username) {
     return;
   }
 
@@ -113,7 +113,7 @@ function executeCommand(user, userID, channelID, message, nestedMacro = false) {
 
 //utility functions
 function notUnderstood(userID, channelID) {
-  return bot.sendMessage({
+  return discordBot.sendMessage({
     to: channelID,
     message: "I'm sorry <@" + userID + ">, I don't understand that."
   });
@@ -133,7 +133,7 @@ function sendMessage(userID, channelID, message) {
   }
 
   //finally
-  bot.sendMessage({
+  discordBot.sendMessage({
     to: channelID,
     message: message
   });
@@ -154,13 +154,13 @@ const helpString = "You can use the following commands with me:\n"
 setInterval(function() {
 
   //do nothing with no channels
-  if (Object.keys(bot.channels).length == 0) {
+  if (Object.keys(discordBot.channels).length == 0) {
     return;
   }
 
   //get the key to the channel named "general" (guaranteed to exist)
-  let channelKey = Object.keys(bot.channels).reduce(function(acc, key) {
-    if (bot.channels[acc].name == "general") {
+  let channelKey = Object.keys(discordBot.channels).reduce(function(acc, key) {
+    if (discordBot.channels[acc].name == "general") {
       return acc;
     } else {
       return key;
@@ -168,10 +168,10 @@ setInterval(function() {
   });
 
   //actually send the message
-  bot.sendMessage({
+  discordBot.sendMessage({
     to: channelKey,
     message: "Type \"!help\" for help"
   });
 
-}, 1000 * 60 * 60);
+}, 1000 * 60 * 60 * 12); //once every twelve hours
 
