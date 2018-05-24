@@ -1,4 +1,5 @@
 //includes
+let twitter = require('twitter');
 let discord = require("discord.io");
 let { parseAndRoll } = require("roll-parser");
 let { macroGet, macroSet } = require("./macro_tool.js");
@@ -7,10 +8,48 @@ let { macroGet, macroSet } = require("./macro_tool.js");
 //LINK: https://github.com/reactiflux/discord-irc/wiki/Creating-a-discord-bot-&-getting-a-token
 let auth = require("./auth.json");
 
+//Initialize Twitter bot
+let twitterBot = new twitter({
+    consumer_key: auth.consumer_key,
+    consumer_secret: auth.consumer_secret,
+    access_token_key: '',
+    access_token_secret: ''
+});
+
+let lastId = 0;
+setInterval(function() {
+  //do nothing with no channels
+  if (Object.keys(discordBot.channels).length == 0) {
+    return;
+  }
+
+  //get the key to the channel named "general" (guaranteed to exist)
+  let channelKey = Object.keys(discordBot.channels).reduce(function(acc, key) {
+    if (discordBot.channels[acc].name == "general") {
+      return acc;
+    } else {
+      return key;
+    }
+  });
+
+  twitterBot.get('statuses/user_timeline', {screen_name:'KRGameStudios'}, function(err, tweets, response) {
+    if (err) throw err;
+    if (lastId != tweets[0].id) {
+      lastId = tweets[0].id;
+
+      //actually send the message
+      discordBot.sendMessage({
+        to: channelKey,
+        message: 'From Twitter: ' + tweets[0].text
+      });
+    }
+  });
+}, 1000 * 30);
+
 //Initialize Discord Bot
 let discordBot = new discord.Client({
-   token: auth.token,
-   autorun: true
+    token: auth.discord_token,
+    autorun: true
 });
 
 discordBot.on("ready", function (evt) {
@@ -150,9 +189,8 @@ const helpString = "You can use the following commands with me:\n"
 + "\n"
 + "\t!roll XdY+Z -- Roll X dice of Y sides, with an optional Z modifier\n"
 
-//help message every 10 minutes
+//help message every 12 hours
 setInterval(function() {
-
   //do nothing with no channels
   if (Object.keys(discordBot.channels).length == 0) {
     return;

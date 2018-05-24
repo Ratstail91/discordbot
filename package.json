@@ -13,6 +13,7 @@
   "dependencies": {
     "discord.io": "github:woor/discord.io#gateway_v6",
     "forever": "^0.15.3",
-    "roll-parser": "^2.3.2"
+    "roll-parser": "^2.3.2",
+    "twitter": "^1.7.1"
   }
 }
