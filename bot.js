@@ -37,6 +37,11 @@ setInterval(function() {
     if (lastId != tweets[0].id) {
       lastId = tweets[0].id;
 
+      //check for the echo trigger
+      if (tweets[0].text.search(/!echo/i) == -1) {
+        return;
+      }
+
       //actually send the message
       discordBot.sendMessage({
         to: channelKey,
