@@ -1,6 +1,5 @@
 //includes
 let discord = require("discord.io");
-let twitter = require('twitter');
 let { parseAndRoll } = require("roll-parser");
 let { macroGet, macroSet } = require("./macro_tool.js");
 
@@ -20,14 +19,6 @@ discordBot.on("ready", function (evt) {
   console.log(discordBot.username + " - (" + discordBot.id + ")");
 });
 
-//Initialize Twitter bot
-let twitterBot = new twitter({
-  consumer_key: auth.consumer_key,
-  consumer_secret: auth.consumer_secret,
-  access_token_key: '',
-  access_token_secret: ''
-});
-
 //message handler
 discordBot.on("message", function (user, userID, channelID, message, evt) {
   //ignore bot messages
@@ -42,39 +33,6 @@ discordBot.on("message", function (user, userID, channelID, message, evt) {
 
   return executeCommand(user, userID, channelID, message, evt);
 });
-
-//twitter echo trigger
-let lastId = 0;
-setInterval(function() {
-  //do nothing with no channels
-  if (Object.keys(discordBot.channels).length == 0) {
-    return;
-  }
-
-  //get the key to the channel named "general" (guaranteed to exist)
-  let channelKey = getChannelKey("general");
-
-  //fetch the timeline (for KRGameStudios)
-  twitterBot.get('statuses/user_timeline', {screen_name:'KRGameStudios'}, function(err, tweets, response) {
-    if (err) {
-    	throw err;
-    }
-
-    if (lastId == tweets[0].id) {
-      return;
-    }
-
-    lastId = tweets[0].id;
-
-    //check for the echo trigger
-    if (tweets[0].text.search(/!echo/i) < 0) {
-      return;
-    }
-
-    //actually send the message
-    sendMessage(channelKey, 'From Twitter: ' + tweets[0].text);
-  });
-}, 1000 * 30);
 
 //the meat of the bot
 function executeCommand(user, userID, channelID, message, nestedMacro = false) {
