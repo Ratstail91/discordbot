@@ -13,14 +13,14 @@ let discordBot = new discord.Client({
   autorun: true
 });
 
-discordBot.on("ready", function (evt) {
+discordBot.on("ready", function () {
   console.log("Connected");
   console.log("Logged in as: ");
   console.log(discordBot.username + " - (" + discordBot.id + ")");
 });
 
 //message handler
-discordBot.on("message", function (user, userID, channelID, message, evt) {
+discordBot.on("message", function (user, userID, channelID, message) {
   //ignore bot messages
   if (user == discordBot.username) {
     return;
@@ -31,7 +31,7 @@ discordBot.on("message", function (user, userID, channelID, message, evt) {
     return;
   }
 
-  return executeCommand(user, userID, channelID, message, evt);
+  return executeCommand(user, userID, channelID, message);
 });
 
 //the meat of the bot
