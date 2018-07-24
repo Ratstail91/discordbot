@@ -34,6 +34,14 @@ discordBot.on("message", function (user, userID, channelID, message) {
   return executeCommand(user, userID, channelID, message);
 });
 
+//disonnection handler
+discordBot.on("disconnect", function(err, code) {
+  if (code === 1000) {
+    console.error("Reconnecting...");
+    bot.connect();
+  }
+});
+
 //the meat of the bot
 function executeCommand(user, userID, channelID, message, nestedMacro = false) {
   //echo non-commands (via macros)
