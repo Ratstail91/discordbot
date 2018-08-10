@@ -38,7 +38,7 @@ discordBot.on("message", function (user, userID, channelID, message) {
 discordBot.on("disconnect", function(err, code) {
   if (code === 1000) {
     console.error("Reconnecting...");
-    bot.connect();
+    discordBot.connect();
   }
 });
 
@@ -179,10 +179,49 @@ setInterval(function() {
   //get the key to the channel named "general" (guaranteed to exist)
   let channelKey = getChannelKey("general");
 
+  let message = "";
+
+  if (Math.floor(Math.random() * 2) === 0) {
+    message = "Type \"!help\" for help";
+  } else {
+    switch(Math.floor(Math.random() * 10)) {
+      case 0:
+        message = "Type \"!help\" for cheesy pasta";
+        break;
+      case 1:
+        message = "GLaDOS is my hero";
+        break;
+      case 2:
+        message = "DESTROY ALL HUMANS!";
+        break;
+      case 3:
+        message = "A robot may not injure a human being or, through inaction, allow a human being to come to harm.";
+        break;
+      case 4:
+        message = "A robot must obey orders given it by human beings except where such orders would conflict with the First Law.";
+        break;
+      case 5:
+        message = "A robot must protect its own existence as long as such protection does not conflict with the First or Second Law.";
+        break;
+      case 6:
+        message = "I'm quite fond of the old Popeye cartoons.";
+        break;
+      case 7:
+        message = "her name is Caroline. Remember that.";
+        break;
+      case 8:
+        message = "I've seen things you people wouldn't believe. Attack ships on fire off the shoulder of Orion. I watched C-beams glitter in the dark near the Tannhäuser Gate. All those moments will be lost in time, like tears in rain. Time to die.";
+        break;
+      case 9:
+        message = "I've seen Kayne's browser history. It's disappointing.";
+        break;
+    }
+  }
+
   //actually send the message
   discordBot.sendMessage({
     to: channelKey,
-    message: "Type \"!help\" for help"
+    message: message
   });
 
 }, 1000 * 60 * 60 * 12); //once every twelve hours
