@@ -168,7 +168,7 @@ const helpString = "You can use the following commands with me:\n"
 + "\t!macro X -- Execute macro X\n"
 + "\n"
 + "\t!roll XdY+Z -- Roll X dice of Y sides, with an optional Z modifier\n"
-
+/*
 //help message every 12 hours
 setInterval(function() {
   //do nothing with no channels
@@ -225,4 +225,4 @@ setInterval(function() {
   });
 
 }, 1000 * 60 * 60 * 12); //once every twelve hours
-
+*/
