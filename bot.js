@@ -52,8 +52,12 @@ function executeCommand(msg, nestedMacro = false) {
       break;
 
     case "say":
-      msg.delete(10);
-      msg.channel.send(msg.content.slice(5, msg.content.length));
+      if (msg.member.roles.find(role => role.name === "admin")) {
+        msg.delete(10);
+        msg.channel.send(msg.content.slice(5, msg.content.length));
+      } else {
+        sendAtPerson(msg.author, msg.channel, "No.");
+      }
       break;
 
     case "roll": {
