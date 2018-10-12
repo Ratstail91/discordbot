@@ -51,6 +51,11 @@ function executeCommand(msg, nestedMacro = false) {
       sendToChannel(msg.channel, helpString);
       break;
 
+    case "say":
+      msg.delete(10);
+      msg.channel.send(msg.content.slice(5, msg.content.length));
+      break;
+
     case "roll": {
       let roll = parseAndRoll(args);
 
@@ -61,6 +66,27 @@ function executeCommand(msg, nestedMacro = false) {
       sendAtPerson(msg.author, msg.channel,
         "rolled " + roll.value + " (" + roll.rolls.toString() + ")"
       );
+    }
+    break;
+
+    case "reminder": {
+      let delay = args.split(" ")[0];
+      let reminder = args.slice(delay.length).trim();
+
+      if (isNaN(parseInt(delay))) {
+        return notUnderstood(msg.author, msg.channel);
+      }
+
+      client.setTimeout(function() {
+        if (reminder.slice(0, 1) === "!") {
+          msg.content = reminder;
+          return executeCommand(msg);
+        } else {
+          return sendAtPerson(msg.author, msg.channel, reminder);
+        }
+      }, parseInt(delay) * 1000);
+
+      sendAtPerson(msg.author, msg.channel, "Reminder set");
     }
     break;
 
@@ -150,7 +176,9 @@ const helpString =
 "\t!macroget X -- Get the value of macro X\n" +
 "\t!macro X -- Execute macro X\n" +
 "\n" +
-"\t!roll XdY+Z -- Roll X dice of Y sides, with an optional Z modifier\n";
+"\t!roll XdY+Z -- Roll X dice of Y sides, with an optional Z modifier\n" +
+"\t!reminder X Y -- Send me the message Y after X seconds (can be multiplication)\n"
+;
 
 //actually log in
 client.login(auth.discordToken);
