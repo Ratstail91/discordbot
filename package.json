@@ -11,9 +11,8 @@
     "node": "node bot.js"
   },
   "dependencies": {
-    "discord.io": "github:woor/discord.io#gateway_v6",
+    "discord.js": "^11.4.2",
     "forever": "^0.15.3",
-    "roll-parser": "^2.3.2",
-    "twitter": "^1.7.1"
+    "roll-parser": "^2.3.2"
   }
 }
