@@ -2,16 +2,17 @@
   "name": "discordbot",
   "version": "1.0.0",
   "description": "My own Discord bot",
-  "main": "bot.js",
+  "main": "ezekiel.js",
   "author": "Kayne Ruse",
   "scripts": {
-    "start": "forever -o forever.log -e error.log start bot.js",
-    "restart": "forever -o forever.log -e error.log restart bot.js",
-    "stop": "forever stop bot.js",
-    "node": "node bot.js"
+    "start": "forever -o forever.log -e error.log start ezekiel.js",
+    "restart": "forever -o forever.log -e error.log restart ezekiel.js",
+    "stop": "forever stop ezekiel.js",
+    "node": "node ezekiel.js"
   },
   "dependencies": {
     "discord.js": "^11.4.2",
+    "dotenv": "^6.2.0",
     "forever": "^0.15.3",
     "roll-parser": "^2.3.2"
   }

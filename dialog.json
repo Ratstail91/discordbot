@@ -1,0 +1,11 @@
+{
+	"help": "Please use !help SUBJECT. Type !subject for a list of subjects.",
+
+	"subject": "Sorry, this hasn't been coded into me yet.",
+
+	"noResult": [
+		"Ouch, that hurt.",
+		"I miss Sanctum...",
+		"I was once the librarian in Sanctum, you know."
+	]
+}
