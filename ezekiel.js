@@ -111,24 +111,22 @@ function processAdminCommands(client, message) {
 
 	switch (command) {
 		case "ping": //DEBUGGING
-			if (utility.isAdmin(message.member)) {
-				utility.sendPublicMessage(client, message.author, message.channel, "PONG!");
-			}
+			utility.sendPublicMessage(client, message.author, message.channel, "PONG!");
 			return true;
 
 		case "say":
-			message.delete(10);
 			utility.sendPublicMessage(client, message.channel, args.join(" "));
+			message.delete(10);
 			return true;
 
 		case "tell":
-			message.delete(10);
 			utility.sendPublicMessage(client, args.shift(), message.channel, args.join(" "));
+			message.delete(10);
 			return true;
 
 		case "whisper":
-			message.delete(10);
 			utility.sendPrivateMessage(client, args.shift(), args.join(" "));
+			message.delete(10);
 			return true;		
 	}
 
