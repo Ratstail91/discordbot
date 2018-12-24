@@ -37,7 +37,7 @@ client.on('ready', async () => {
 		let link = await client.generateInvite(["ADMINISTRATOR"]);
 		console.log("Invite Link: " + link);
 	} catch(e) {
-		console.log(e.stack);
+		console.log(e.stack || e);
 	}
 
 	// You can set status to 'online', 'invisible', 'away', or 'dnd' (do not disturb)
@@ -77,7 +77,7 @@ client.on('message', async message => {
 			return;
 		}
 	} catch(e) {
-		console.log(e.stack);
+		console.log(e.stack || e);
 	}
 });
 
