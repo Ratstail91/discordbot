@@ -4,13 +4,13 @@ require('dotenv').config({path: './.env'});
 // Node Modules
 let discord = require('discord.js');
 let client = new discord.Client();
-//let cron = require('node-cron');
+let cron = require('node-cron');
 
 // Bot Modules
-let utility = require("./utility.js");
+let {sendPublicMessage, sendPrivateMessage, generateDialogFunction, isAdmin} = require("./utility.js");
 
 //dialog system
-let dialog = utility.generateDialogFunction(require("./dialog.json"));
+let dialog = generateDialogFunction(require("./dialog.json"));
 
 //ADAM dialog decorator
 //NOTE: This isn't strictly necessary for the bots
@@ -52,6 +52,11 @@ client.on('ready', async () => {
 	}
 
 	console.log("Logged in as: " + client.user.username + " - " + client.user.id);
+
+	//wisdom
+	cron.schedule("0 7 * * *", () => {
+		sendPublicMessage(client, "general", dialog("wisdom"));
+	});
 });
 
 // Create an event listener for messages
@@ -68,7 +73,7 @@ client.on('message', async message => {
 
 	try {
 		//admin commands
-		if (utility.isAdmin(message.member) && processAdminCommands(client, message)) {
+		if (isAdmin(message.member) && processAdminCommands(client, message)) {
 			return;
 		}
 
@@ -92,11 +97,11 @@ function processBasicCommands(client, message) {
 
 	switch (command) {
 		case "help":
-			utility.sendPublicMessage(client, message.author, message.channel, dialog(command, args[0]));
+			sendPublicMessage(client, message.author, message.channel, dialog(command, args[0]));
 			return true;
 
 		default:
-			utility.sendPublicMessage(client, message.author, message.channel, dialog(command));
+			sendPublicMessage(client, message.author, message.channel, dialog(command));
 			return true;
 	}
 
@@ -111,21 +116,21 @@ function processAdminCommands(client, message) {
 
 	switch (command) {
 		case "ping": //DEBUGGING
-			utility.sendPublicMessage(client, message.author, message.channel, "PONG!");
+			sendPublicMessage(client, message.author, message.channel, "PONG!");
 			return true;
 
 		case "say":
-			utility.sendPublicMessage(client, message.channel, args.join(" "));
+			sendPublicMessage(client, message.channel, args.join(" "));
 			message.delete(10);
 			return true;
 
 		case "tell":
-			utility.sendPublicMessage(client, args.shift(), message.channel, args.join(" "));
+			sendPublicMessage(client, args.shift(), message.channel, args.join(" "));
 			message.delete(10);
 			return true;
 
 		case "whisper":
-			utility.sendPrivateMessage(client, args.shift(), args.join(" "));
+			sendPrivateMessage(client, args.shift(), args.join(" "));
 			message.delete(10);
 			return true;		
 	}
