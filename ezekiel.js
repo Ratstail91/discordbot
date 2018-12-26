@@ -55,7 +55,7 @@ client.on('ready', async () => {
 
 	//wisdom
 	cron.schedule("0 7 * * *", () => {
-		sendPublicMessage(client, "general", dialog("wisdom"));
+		sendPublicMessage(client, "bot-spam", dialog("wisdom"));
 	});
 });
 
