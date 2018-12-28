@@ -1,10 +1,12 @@
 {
-	"help": "Please use !help subject. Type !subject for a list of subjects.",
+	"help": "Please use !help subject. Type !subjects for a list of subjects.",
+	"subjects": "Subjects include: wisdom",
 
-	"subject": "Subjects include: wisdom",
+	"helpWisdom": "Pearls of wisdom. Use !wisdom to access them.",
 
 	"wisdom": [
-		"A game isn't done when there's nothing left to add, but rather when there's nothing left to take away."
+		"A game isn't done when there's nothing left to add, but rather when there's nothing left to take away.",
+		"Premature optimization is the root of all evil - Donald Knuth"
 	],
 
 	"noResult": [
