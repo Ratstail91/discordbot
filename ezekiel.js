@@ -5,6 +5,7 @@ require('dotenv').config({path: './.env'});
 let discord = require('discord.js');
 let client = new discord.Client();
 let cron = require('node-cron');
+let { parseAndRoll } = require("roll-parser");
 
 // Bot Modules
 let {sendPublicMessage, sendPrivateMessage, generateDialogFunction, isAdmin} = require("./utility.js");
@@ -98,6 +99,17 @@ function processBasicCommands(client, message) {
 	switch (command) {
 		case "help":
 			sendPublicMessage(client, message.author, message.channel, dialog(command, args[0]));
+			return true;
+
+		case "roll":
+			let roll = parseAndRoll(args);
+
+			if (roll === null) {
+				sendPublicMessage(client, message.author, message.channel, dialog("noroll"));
+				return true;
+			}
+
+			sendPublicMessage(client, message.author, message.channel, dialog(command, roll.value, roll.rolls.toString() ));
 			return true;
 
 		default:
