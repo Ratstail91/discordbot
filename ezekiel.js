@@ -4,7 +4,7 @@ require('dotenv').config({path: './.env'});
 // Node Modules
 let discord = require('discord.js');
 let client = new discord.Client();
-let cron = require('node-cron');
+let { CronJob } = require('cron');
 let { parseAndRoll } = require("roll-parser");
 
 // Bot Modules
@@ -36,7 +36,7 @@ client.on('uncaughtException', console.error);
 client.on('ready', async () => {
 	// Generates invite link
 	try {
-		let link = await client.generateInvite(["ADMINISTRATOR"]);
+		let link = await client.generateInvite(["SEND_MESSAGES", "MANAGE_MESSAGES"]);
 		console.log("Invite Link: " + link);
 	} catch(e) {
 		console.log(e.stack || e);
@@ -56,9 +56,10 @@ client.on('ready', async () => {
 	console.log("Logged in as: " + client.user.username + " - " + client.user.id);
 
 	//wisdom
-	cron.schedule("0 7 * * *", () => {
+	let wisdomJob = new CronJob("0 7 * * *", () => {
 		sendPublicMessage(client, "KRGameStudios", "bot-spam", dialog("wisdom"));
 	});
+	wisdomJob.start();
 });
 
 // Create an event listener for messages
