@@ -30,6 +30,7 @@ dialog = function(baseDialog) {
 
 //handle errors
 client.on('error', console.error);
+client.on('uncaughtException', console.error);
 
 // The ready event is vital, it means that your bot will only start reacting to information from discord _after_ ready is emitted
 client.on('ready', async () => {
@@ -56,7 +57,7 @@ client.on('ready', async () => {
 
 	//wisdom
 	cron.schedule("0 7 * * *", () => {
-		sendPublicMessage(client, "bot-spam", dialog("wisdom"));
+		sendPublicMessage(client, "KRGameStudios", "bot-spam", dialog("wisdom"));
 	});
 });
 
@@ -98,22 +99,22 @@ function processBasicCommands(client, message) {
 
 	switch (command) {
 		case "help":
-			sendPublicMessage(client, message.author, message.channel, dialog(command, args[0]));
+			sendPublicMessage(client, message.guild, message.author, message.channel, dialog(command, args[0]));
 			return true;
 
 		case "roll":
 			let roll = parseAndRoll(args);
 
 			if (roll === null) {
-				sendPublicMessage(client, message.author, message.channel, dialog("noroll"));
+				sendPublicMessage(client, message.guild, message.author, message.channel, dialog("noroll"));
 				return true;
 			}
 
-			sendPublicMessage(client, message.author, message.channel, dialog(command, roll.value, roll.rolls.toString() ));
+			sendPublicMessage(client, message.guild, message.author, message.channel, dialog(command, roll.value, roll.rolls.toString() ));
 			return true;
 
 		default:
-			sendPublicMessage(client, message.author, message.channel, dialog(command));
+			sendPublicMessage(client, message.guild,  message.author, message.channel, dialog(command));
 			return true;
 	}
 
@@ -128,16 +129,17 @@ function processAdminCommands(client, message) {
 
 	switch (command) {
 		case "ping": //DEBUGGING
-			sendPublicMessage(client, message.author, message.channel, "PONG!");
+			sendPublicMessage(client, message.guild, message.author, message.channel, "PONG!");
+			sendPublicMessage(client, "KRGameStudios", "general", "global ping");
 			return true;
 
 		case "say":
-			sendPublicMessage(client, message.channel, args.join(" "));
+			sendPublicMessage(client, message.guild, message.channel, args.join(" "));
 			message.delete(10);
 			return true;
 
 		case "tell":
-			sendPublicMessage(client, args.shift(), message.channel, args.join(" "));
+			sendPublicMessage(client, message.guild, args.shift(), message.channel, args.join(" "));
 			message.delete(10);
 			return true;
 

@@ -3,31 +3,41 @@ exports = module.exports = {};
 
 //SendPublicMessage
 //client - discord.js client
+//guild - discord.js guild
 //user (optional) - discord.js user OR username
 //channel - discord.js channel OR channel name
 //message - message to send
-exports.sendPublicMessage = function(client, user, channel, message) {
-	//Handle optional second argument (so much for default arugments in node)
+exports.sendPublicMessage = function(client, guild, user, channel, message) {
+	//Handle optional third argument (so much for default arugments in node)
 	if (message === undefined) {
 		message = channel;
 		channel = user;
 		user = null;
 	}
 
-	//handle user strings
-	if (typeof(user) === "string") {
-		user = client.users.find(item => item.username === user || item.id === user);
-		if (!user) {
-			throw "Can't find that user";
+	//handle guild strings
+	if (typeof(guild) === "string") {
+		guild = client.guilds.find(item => item.name === guild || item.id === guild);
+		if (!guild) {
+			throw "Can't find that guild";
 		}
 	}
 
 	//handle channel strings
 	if (typeof(channel) === "string") {
-		channel = client.channels.find(item => item.name === channel || item.id === channel);
+		channel = guild.channels.find(item => item.name === channel || item.id === channel);
 		if (!channel) {
 			throw "Can't find that channel";
 		}
+	}
+
+	//handle user strings
+	if (typeof(user) === "string") {
+		let member = guild.members.find(item => item.user.username === user || item.user.id === user);
+		if (!member) {
+			throw "Can't find that member/user";
+		}
+		user = member.user;
 	}
 
 	//Utility trick: @user
@@ -93,5 +103,5 @@ exports.generateDialogFunction = function(dialogJson) {
 //IsAdmin - DEBUGGING ONLY
 //user - discord.js member
 exports.isAdmin = function(member) {
-	return member.roles.find(role => role.name === process.env.ADMIN_ROLE || role.name === process.env.MOD_ROLE);
+	return member && member.roles.find(role => role.name === process.env.ADMIN_ROLE || role.name === process.env.MOD_ROLE);
 }
