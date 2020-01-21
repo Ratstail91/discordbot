@@ -33,7 +33,7 @@ exports.sendPublicMessage = function(client, guild, user, channel, message) {
 
 	//handle user strings
 	if (typeof(user) === "string") {
-		let member = guild.members.find(item => item.user.username === user || item.user.id === user);
+		let member = guild.members.find(item => item.user.username === user || item.user.id === user || `<@!${item.user.id}>` === user);
 		if (!member) {
 			throw "Can't find that member/user";
 		}
@@ -56,7 +56,7 @@ exports.sendPublicMessage = function(client, guild, user, channel, message) {
 exports.sendPrivateMessage = function(client, user, message) {
 	//handle user strings
 	if (typeof(user) === "string") {
-		user = client.users.find(item => item.username === user || item.id === user);
+		user = client.users.find(item => item.username === user || item.id === user || `<@!${item.id}>` === user);
 	}
 
 	user.send(message)
