@@ -11,10 +11,10 @@
     "node": "node ezekiel.js"
   },
   "dependencies": {
-    "cron": "^1.8.1",
-    "discord.js": "^11.5.1",
-    "dotenv": "^8.2.0",
-    "forever": "^2.0.0",
-    "roll-parser": "^2.3.2"
+    "cron": ">=1.8.2",
+    "discord.js": ">=12.2.0",
+    "dotenv": ">=8.2.0",
+    "forever": ">=3.0.0",
+    "roll-parser": ">=2.3.2"
   }
 }
