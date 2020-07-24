@@ -48,8 +48,6 @@ client.on('ready', async () => {
 	// Sets your "Playing"
 	if (process.env.ACTIVITY) {
 		client.user.setActivity(process.env.ACTIVITY, { type: process.env.TYPE })
-			//DEBUGGING
-			.then(presence => console.log("Activity set to " + (presence.game ? presence.game.name : 'none')) )
 			.catch(console.error);
 	}
 
@@ -136,18 +134,24 @@ function processAdminCommands(client, message) {
 
 		case "say":
 			sendPublicMessage(client, message.guild, message.channel, args.join(" "));
-			message.delete(10);
+			message.delete({ timeout: 10 });
 			return true;
 
 		case "tell":
 			sendPublicMessage(client, message.guild, args.shift(), message.channel, args.join(" "));
-			message.delete(10);
+			message.delete({ timeout: 10 });
 			return true;
 
 		case "whisper":
 			sendPrivateMessage(client, args.shift(), args.join(" "));
-			message.delete(10);
-			return true;		
+			message.delete({ timeout: 10 });
+			return true;
+
+		case "clean":
+			message.channel.messages.fetch({ limit: args[0] }).then(msgs => {
+				msgs.map(m => m.delete( { timeout: 10 } ));
+			});
+			return true;
 	}
 
 	return false;
