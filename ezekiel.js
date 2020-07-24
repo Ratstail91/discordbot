@@ -148,9 +148,12 @@ function processAdminCommands(client, message) {
 			return true;
 
 		case "clean":
-			message.channel.messages.fetch({ limit: args[0] }).then(msgs => {
+			if (isNaN(args[0])) {
+				return false;
+			}
+			message.channel.messages.fetch({ limit: Math.max(0, Math.min(args[0], 100)) }).then(msgs => {
 				msgs.map(m => m.delete( { timeout: 10 } ));
-			});
+			}).catch(console.error);
 			return true;
 	}
 
