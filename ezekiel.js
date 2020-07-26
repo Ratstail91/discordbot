@@ -83,7 +83,7 @@ client.on('message', async message => {
 			return;
 		}
 	} catch(e) {
-		console.log(e.stack || e);
+		console.error(e.stack || e);
 	}
 });
 

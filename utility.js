@@ -59,6 +59,10 @@ exports.sendPrivateMessage = function(client, user, message) {
 		user = client.users.cache.find(item => item.username === user || item.id === user || `<@!${item.id}>` === user);
 	}
 
+	if (!user) {
+		throw "Can't find that user";
+	}
+
 	user.send(message)
 		.catch(console.error);
 }
