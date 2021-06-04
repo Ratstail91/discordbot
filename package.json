@@ -5,16 +5,14 @@
   "main": "ezekiel.js",
   "author": "Kayne Ruse",
   "scripts": {
-    "start": "forever -o forever.log -e error.log start ezekiel.js",
-    "restart": "forever -o forever.log -e error.log restart ezekiel.js",
-    "stop": "forever stop ezekiel.js",
+    "start": "pm2 start ezekiel.js",
+    "restart": "pm2 restart ezekiel.js",
+    "stop": "pm2 stop ezekiel.js",
     "node": "node ezekiel.js"
   },
   "dependencies": {
-    "cron": ">=1.8.2",
-    "discord.js": ">=12.2.0",
-    "dotenv": ">=8.2.0",
-    "forever": ">=3.0.0",
+    "discord.js": ">=12.5.3",
+    "dotenv": ">=10.0.0",
     "roll-parser": ">=2.3.2"
   }
 }
